@@ -7,13 +7,15 @@ import CalendarCom from './components/calendar/CalendarCom'
 
 import { createBrowserRouter, createRoutesFromElements, Outlet, Route, RouterProvider } from 'react-router-dom'
 import ClientComp from './components/client/ClientComp'
+import ClientDetailPage from './components/client/ClientDetailPage'
 
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/' element={<Root />}>
         <Route index element={<CalendarCom />} />
-        <Route path='/client' element={<ClientComp />} />
+        <Route path='/clients' element={<ClientComp />} />
+        <Route path="/client/:client_id" element={<ClientDetailPage />} />
       </Route>
     )
   )
@@ -33,6 +35,24 @@ const Root = () => {
       <Header />
       <LeftBar />
       <Outlet />
+      <Footer />
     </div>
+  )
+}
+
+const Footer = () => {
+  return (
+    <footer
+      style={{
+        height: "30px",
+        display: "flex",
+        alignItems: "center",
+        padding: "0 0 0 20px",
+        fontSize: "11px",
+        opacity: 0.5
+      }}
+    >
+      © 2023 Simple Calendar · Terms · Privacy & Security · Support · Licensed Content
+    </footer>
   )
 }

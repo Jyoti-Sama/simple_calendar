@@ -3,9 +3,12 @@ import Modal from 'react-modal';
 import { motion } from "framer-motion";
 import styles from './modal.module.css'
 
+import clientData from '../../assets/clients.json'
+
 Modal.setAppElement('#root'); // Set the app element to avoid accessibility issues
 
 const ShowEventModal = ({ isOpen, onClose, submitHandler, temEvent }) => {
+    const [eventId, setEventId] = useState(0);
     const [selectedOption, setSelectedOption] = useState('client');
     const [clientName, setClientName] = useState(temEvent.client);
     const [eventTitle, setEventTitle] = useState(temEvent.title);
@@ -26,6 +29,13 @@ const ShowEventModal = ({ isOpen, onClose, submitHandler, temEvent }) => {
 
     const [selectedService, setSelectedService] = useState(temEvent.selectedService)
     const [serviceFee, setServiceFee] = useState(temEvent.serviceFee)
+
+    const [clients, setclients] = useState([]);
+    const [clientID, setclientID] = useState('');
+
+    useEffect(() => {
+        setclients(clientData)
+    }, [])
 
 
     const handleSelectChange = (event) => {
@@ -58,7 +68,13 @@ const ShowEventModal = ({ isOpen, onClose, submitHandler, temEvent }) => {
     };
 
     const handleDurationChange = (event) => {
-        setEventDuration(event.target.value);
+        let min = event.target.value;
+        setEventDuration(min);
+
+        // 3 min -> $8
+        // 30 / 3 = 10 | 10 * 8 = 80
+        let cost = Math.floor(min / 3) * 8;
+        setServiceFee(cost);
     };
 
     const handleLocationChange = (event) => {
@@ -151,28 +167,38 @@ const ShowEventModal = ({ isOpen, onClose, submitHandler, temEvent }) => {
 
     const handleDoneClick = () => {
         // Handle the logic for saving the event  
-        const payload = {};
+        const payload = {
+            id: eventId,
+            title: "",
+            selectedOption,
+            clientName,
+            eventTitle,
+            isAllDay,
+            eventDate,
+            eventDateTo,
+            eventTime,
+            eventDuration,
+            eventLocation,
+            isRepeating,
+            repeatEvery,
+            repeatFrequency,
+            repeatFrequencyCount,
+            repeatDays,
+            repeatEndType,
+            repeatEndAfter,
+            repeatEndDate,
+            selectedService,
+            serviceFee,
+            start: new Date(),
+            end: new Date(),
+            client_id: clientID,
+        };
 
-        payload.eventDate = eventDate;
-        payload.eventLocation = eventLocation;
-
-        if (isRepeating) {
-            repeatEvery
-            repeatFrequency
-            repeatDays
-
-            repeatEndType
-
-            repeatEndAfter
-            repeatEndDate
-        }
 
         if (isAllDay) {
-            payload.eventDateTo = new Date(eventDateTo);
+            // TODO cost calculation on all day and repeat case
+            // payload.eventDateTo = new Date(eventDateTo);
         } else {
-            // payload.eventTime = eventTime;
-            // payload.eventDuration = eventDuration;
-
             const date = new Date(eventDate + " " + eventTime);
             const start = date;
             const end = new Date(date.getTime() + eventDuration * 1000 * 60);
@@ -183,19 +209,72 @@ const ShowEventModal = ({ isOpen, onClose, submitHandler, temEvent }) => {
 
         if (selectedOption === 'client') {
             payload.title = clientName;
-            payload.clientName = clientName;
-
-            payload.serviceFee = serviceFee;
-            payload.selectedService = selectedService;
         } else {
             payload.title = eventTitle;
         }
 
-        console.log(payload)
+        // console.log(payload)
 
         submitHandler(payload);
         onClose();
     };
+
+
+    useEffect(() => {
+
+        const details = localStorage.getItem("temp-event");
+        if (details) {
+            const eventDetails = JSON.parse(details);
+            const {
+                id,
+                title,
+                selectedOption,
+                clientName,
+                eventTitle,
+                isAllDay,
+                eventDate,
+                eventDateTo,
+                eventTime,
+                eventDuration,
+                eventLocation,
+                isRepeating,
+                repeatEvery,
+                repeatFrequency,
+                repeatFrequencyCount,
+                repeatDays,
+                repeatEndType,
+                repeatEndAfter,
+                repeatEndDate,
+                selectedService,
+                serviceFee,
+                start,
+                end,
+                client_id
+            } = eventDetails;
+
+            setEventId(id);
+            setSelectedOption(selectedOption);
+            setClientName(clientName);
+            setEventTitle(eventTitle);
+            setIsAllDay(isAllDay);
+            setEventDate(eventDate);
+            setEventDateTo(eventDateTo);
+            setEventTime(eventTime);
+            setEventDuration(eventDuration);
+            setEventLocation(eventLocation);
+            setIsRepeating(isRepeating);
+            setRepeatEvery(repeatEvery);
+            setRepeatFrequency(repeatFrequency);
+            setRepeatFrequencyCount(repeatFrequencyCount);
+            setRepeatDays(repeatDays);
+            setRepeatEndType(repeatEndType);
+            setRepeatEndAfter(repeatEndAfter);
+            setRepeatEndDate(repeatEndDate);
+            setSelectedService(selectedService);
+            setServiceFee(serviceFee);
+            setclientID(client_id);
+        }
+    }, [])
 
 
     return (
@@ -262,9 +341,7 @@ const ShowEventModal = ({ isOpen, onClose, submitHandler, temEvent }) => {
                                     <option value="" disabled selected hidden>
                                         Client Name
                                     </option>
-                                    <option value="client a">client a</option>
-                                    <option value="client b">client b</option>
-                                    <option value="client c">client c</option>
+                                    {clients.map(item => <option key={item.name} value={item.name}>{item.name}</option>)}
                                 </select>
                             </label>
 

@@ -1,0 +1,26 @@
+[
+    {
+        "name": "Brad Pitt",
+        "client_id": "1",
+        "email": "brad@gmail.com",
+        "isAdult": true,
+        "number": "0321654987",
+        "relation": "Clinician: User S"
+    },
+    {
+        "name": "Schedule Adam Cohen",
+        "client_id": "2",
+        "email": "adam@gmail.com",
+        "isAdult": true,
+        "number": "0147852369",
+        "relation": "Clinician: User S"
+    },
+    {
+        "name": "Schedule Angela Simpson",
+        "client_id": "3",
+        "email": "angela@gmail.com",
+        "isAdult": true,
+        "number": "0987453621",
+        "relation": "Clinician: User S"
+    }
+]

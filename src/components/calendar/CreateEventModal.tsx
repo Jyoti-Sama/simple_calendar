@@ -3,6 +3,8 @@ import Modal from 'react-modal';
 import { motion } from "framer-motion";
 import styles from './modal.module.css'
 
+import clientData from '../../assets/clients.json'
+
 Modal.setAppElement('#root'); // Set the app element to avoid accessibility issues
 
 const CreateEventModal = ({ isOpen, onClose, submitHandler, temEvent }) => {
@@ -13,17 +15,23 @@ const CreateEventModal = ({ isOpen, onClose, submitHandler, temEvent }) => {
     const [eventDate, setEventDate] = useState("2023-05-01");
     const [eventDateTo, setEventDateTo] = useState('');
     const [eventTime, setEventTime] = useState('12:30');
-    const [eventDuration, setEventDuration] = useState(50);
+    const [eventDuration, setEventDuration] = useState(30);
     const [eventLocation, setEventLocation] = useState('Location: Unassigned');
     const [isRepeating, setIsRepeating] = useState(false);
 
+    const [clients, setclients] = useState([]);
+    const [clientID, setclientID] = useState('');
+
+    useEffect(() => {
+        setclients(clientData)
+    }, [])
 
     const handleSelectChange = (event) => {
         setSelectedOption(event.target.value);
     };
 
-    const handleClientNameChange = (event) => {
-        setClientName(event.target.value);
+    const handleClientNameChange = (name) => {
+        setClientName(name);
     };
 
     const handleEventTitleChange = (event) => {
@@ -48,7 +56,13 @@ const CreateEventModal = ({ isOpen, onClose, submitHandler, temEvent }) => {
     };
 
     const handleDurationChange = (event) => {
-        setEventDuration(event.target.value);
+        let min = event.target.value;
+        setEventDuration(min);
+
+        // 3 min -> $8
+        // 30 / 3 = 10 | 10 * 8 = 80
+        let cost = Math.floor(min / 3) * 8;
+        setServiceFee(cost);
     };
 
     const handleLocationChange = (event) => {
@@ -88,7 +102,7 @@ const CreateEventModal = ({ isOpen, onClose, submitHandler, temEvent }) => {
     const [repeatEndDate, setRepeatEndDate] = useState("");
 
     const [selectedService, setSelectedService] = useState("Group therapy 1")
-    const [serviceFee, setServiceFee] = useState(100)
+    const [serviceFee, setServiceFee] = useState(80)
 
     const handleRepeatEveryChange = (event) => {
         setRepeatEvery(parseInt(event.target.value));
@@ -160,28 +174,37 @@ const CreateEventModal = ({ isOpen, onClose, submitHandler, temEvent }) => {
 
     const handleDoneClick = () => {
         // Handle the logic for saving the event  
-        const payload = {};
+        const payload = {
+            client_id: clientID,
+            title: "",
+            selectedOption,
+            clientName,
+            eventTitle,
+            isAllDay,
+            eventDate,
+            eventDateTo,
+            eventTime,
+            eventDuration,
+            eventLocation,
+            isRepeating,
+            repeatEvery,
+            repeatFrequency,
+            repeatFrequencyCount,
+            repeatDays,
+            repeatEndType,
+            repeatEndAfter,
+            repeatEndDate,
+            selectedService,
+            serviceFee,
+            start: new Date(),
+            end: new Date()
+        };
 
-        payload.eventDate = eventDate;
-        payload.eventLocation = eventLocation;
-
-        if (isRepeating) {
-            repeatEvery
-            repeatFrequency
-            repeatDays
-
-            repeatEndType
-
-            repeatEndAfter
-            repeatEndDate
-        }
 
         if (isAllDay) {
-            payload.eventDateTo = new Date(eventDateTo);
+            // TODO cost calculation on all day and repeat case
+            // payload.eventDateTo = new Date(eventDateTo);
         } else {
-            // payload.eventTime = eventTime;
-            // payload.eventDuration = eventDuration;
-
             const date = new Date(eventDate + " " + eventTime);
             const start = date;
             const end = new Date(date.getTime() + eventDuration * 1000 * 60);
@@ -192,19 +215,27 @@ const CreateEventModal = ({ isOpen, onClose, submitHandler, temEvent }) => {
 
         if (selectedOption === 'client') {
             payload.title = clientName;
-            payload.clientName = clientName;
-
-            payload.serviceFee = serviceFee;
-            payload.selectedService = selectedService;
         } else {
             payload.title = eventTitle;
         }
 
-        console.log(payload)
+        // console.log(payload)
 
         submitHandler(payload);
         onClose();
     };
+
+
+    useEffect(() => {
+        let temp = localStorage.getItem("set-event");
+        if (temp) {
+            temp = JSON.parse(temp);
+            setEventDate(temp.date);
+            setEventTime(temp.min);
+            setEventDuration(temp.duration);
+        }
+    }, [])
+
 
 
     return (
@@ -260,7 +291,12 @@ const CreateEventModal = ({ isOpen, onClose, submitHandler, temEvent }) => {
 
                                 <select
                                     value={clientName}
-                                    onChange={handleClientNameChange}
+                                    onChange={(e) => {
+                                        let s = e.target.value;
+                                        s = s.split(":");
+                                        handleClientNameChange(s[0]);
+                                        setclientID(s[1]);
+                                    }}
                                     style={{
                                         height: "31px",
                                         width: "190px",
@@ -271,9 +307,7 @@ const CreateEventModal = ({ isOpen, onClose, submitHandler, temEvent }) => {
                                     <option value="" disabled selected hidden>
                                         Client Name
                                     </option>
-                                    <option value="client a">client a</option>
-                                    <option value="client b">client b</option>
-                                    <option value="client c">client c</option>
+                                    {clients.map(item => <option key={item.name} value={item.name + ":" + item.client_id}>{item.name}</option>)}
                                 </select>
                             </label>
 

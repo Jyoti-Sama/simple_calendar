@@ -1,6 +1,16 @@
 import { Link } from 'react-router-dom'
 import styles from './style.module.css'
 
+// import { NavLink } from "react-router-dom";
+
+// <NavLink
+//   to="/messages"
+//   className={({ isActive, isPending }) =>
+//     isPending ? "pending" : isActive ? "active" : ""
+//   }
+// >
+//   Messages
+// </NavLink>;
 
 
 function LeftBar() {
@@ -18,7 +28,7 @@ function LeftBar() {
                     </a>
                 </Link>
 
-                <Link to="/client">
+                <Link to="/clients">
                     <a>
                         <div className={styles['menu-items']}>
                             <div className={styles['m-icon']}>

@@ -78,7 +78,7 @@
     text-decoration: none;
     border-radius: 3px;
     background: #fff;
-    color: #333;
+    /* color: #333; */
     font-weight: 600;
     height: 32px;
 
@@ -181,4 +181,9 @@
 .extra-privacy>span {
     padding: 2px 0 0 0px;
     font-size: 14px;
+}
+
+.active{
+    color: aqua;
+    font-size: 50px;
 }

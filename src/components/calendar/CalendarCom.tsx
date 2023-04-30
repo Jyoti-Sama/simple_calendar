@@ -19,38 +19,6 @@ import CreateEventModal from './CreateEventModal'
 import './custom.cal.css'
 import ShowEventModal from './ShowEventModal'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const MyModal = ({ submitHandler, modalIsOpen }): JSX.Element => {
-
-    console.log("hello there", "general kenobi");
-    return (
-        <div>
-            <h2> Hello </h2>
-            <Modal
-                isOpen={modalIsOpen}
-                // onAfterOpen={this.afterOpenModal}
-                // onRequestClose={this.closeModal}
-                contentLabel="Example Modal"
-            >
-                <h2 /* ref={subtitle => (this.subtitle = subtitle)} */>
-                    For admins/ Lectures
-                </h2>
-                {/* <button onClick={this.closeModal}>close</button> */}
-                <div>Add lecture to calender</div>
-                <form onSubmit={submitHandler}>
-                    <input />
-
-                    <input type="submit" value="Submit" />
-                </form>
-            </Modal>
-        </div>
-    );
-}
-
-//
-
-
-
 const App: FC = () => {
     const [events, setEvents] = useState<Event[]>([
         {
@@ -96,15 +64,17 @@ const App: FC = () => {
         let s = new Date(e.start);
         let en = new Date(e.end);
 
-        console.log(s)
+        console.log(s, s.getMinutes())
 
         const temp = {
             start: e.start,
             end: e.end,
-            date: `${s.getFullYear()}-${(s.getMonth()+1).toString().padStart(2, '0')}-${s.getDate()}`,
-            min: s.getMinutes(),
+            date: `${s.getFullYear()}-${(s.getMonth() + 1).toString().padStart(2, '0')}-${s.getDate().toString().padStart(2, '0')}`,
+            min: s.getHours().toString().padStart(2, '0') + ":" + s.getMinutes().toString().padStart(2, '0'),
             duration: Math.floor((en.getTime() - s.getTime()) / (1000 * 60))
         }
+
+        localStorage.setItem("set-event", JSON.stringify(temp));
 
         settempEvent(temp);
         setmodalIsOpen(true);
@@ -112,10 +82,13 @@ const App: FC = () => {
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     function onSubmit(payload) {
+        console.log(payload, "pp")
 
         setEvents(currentEvents => {
+            const id = Date.now();
+            payload.id = id;
             const selectedEvent = {
-                id: Date.now(),
+                id: id,
                 title: payload.title,
                 start: payload.start,
                 end: payload.end,
@@ -124,13 +97,45 @@ const App: FC = () => {
             return [...currentEvents, selectedEvent]
         })
 
-        console.log(tempEvent);
+        console.log(events);
         setmodalIsOpen(false);
+        closeEventShowModal();
+    }
+
+    function onEdit(payload) {
+        const tempEvents = [...events];
+
+        console.log(payload)
+
+        console.log(tempEvents)
+
+        let index = -1;
+        for (let i = 0; i < tempEvents.length; i++) {
+            if (tempEvents[i].id === payload.id) {
+                index = i;
+                break;
+            }
+        }
+        console.log(index)
+        if (index != -1) {
+            tempEvents[index].title = payload.title;
+            tempEvents[index].start = payload.start;
+            tempEvents[index].end = payload.end;
+            tempEvents[index].eventDetails = payload;
+            setEvents(tempEvents);
+        } else {
+            setEvents([]);
+        }
+
+
+
+        setmodalIsOpen(false);
+        closeEventShowModal();
     }
 
     // TODO
     const handleSelectEvent = (e: any) => {
-        console.log(e.eventDetails)
+        localStorage.setItem('temp-event', JSON.stringify(e.eventDetails));
         setEventShowModalIsOpen(true)
     }
 
@@ -195,6 +200,10 @@ const App: FC = () => {
     };
 
 
+    useEffect(() => {
+      localStorage.setItem('all-events', JSON.stringify(events));
+    }, [events])  
+
     return (
         <div>
             <DnDCalendar
@@ -231,32 +240,20 @@ const App: FC = () => {
 
             <hr style={{ opacity: "0.5" }} />
 
-            <footer
-                style={{
-                    height: "30px",
-                    display: "flex",
-                    alignItems: "center",
-                    padding: "0 0 0 20px",
-                    fontSize: "11px",
-                    opacity: 0.5
-                }}
-            >
-                © 2023 Simple Calendar · Terms · Privacy & Security · Support · Licensed Content
-            </footer>
 
-            {<CreateEventModal
+            {modalIsOpen ? <CreateEventModal
                 submitHandler={onSubmit}
                 isOpen={modalIsOpen}
                 onClose={closeCreateEventModal}
                 temEvent={tempEvent}
-            />}
+            /> : null}
 
-            {<ShowEventModal
-                submitHandler={onSubmit}
+            {eventShowModalIsOpen ? <ShowEventModal
+                submitHandler={onEdit}
                 isOpen={eventShowModalIsOpen}
                 onClose={closeEventShowModal}
                 temEvent={tempEvent}
-            />}
+            /> : null}
 
 
         </div>

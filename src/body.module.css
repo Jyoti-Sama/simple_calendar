@@ -1,0 +1,18 @@
+.container {
+    -webkit-text-size-adjust: 100%;
+    --fc-daygrid-event-dot-width: 8px;
+    --fc-list-event-dot-width: 10px;
+    --fc-list-event-hover-bg-color: #f5f5f5;
+    --vh: 6.89px;
+    font-family: system-ui, "Segoe UI", Roboto, Ubuntu, Cantarell, Oxygen-Sans, "Helvetica Neue", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    color: #444;
+    font-size: 13px;
+    line-height: 18px;
+    -webkit-tap-highlight-color: transparent;
+    min-width: 1024px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 204px auto;
+    grid-template-rows: var(--top-nav-height, 56px) 1fr auto;
+    grid-template-areas: "top-nav top-nav" "left-nav content" "left-nav footer";    
+}

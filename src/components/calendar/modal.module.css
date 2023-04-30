@@ -1,0 +1,40 @@
+.modal-container {
+    font-family: system-ui, "Segoe UI", Roboto, Ubuntu, Cantarell, Oxygen-Sans, "Helvetica Neue", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    color: #333;
+    background-color: #fff;
+}
+
+.modal-header {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 32px;
+    color: #333;
+    margin-bottom: 5px;
+
+    font-family: system-ui, "Segoe UI", Roboto, Ubuntu, Cantarell, Oxygen-Sans, "Helvetica Neue", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.button {
+    /* display: inline-flex; */
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 4px;
+    height: 32px;
+    padding: 6px 12px;
+    font-weight: 600;
+    line-height: 18px;
+    background-color: transparent;
+    color: #fff;
+}
+
+.repeat-section {
+    background: #f8f8f8;
+    padding: 8px 16px;
+    border-radius: 4px;
+    margin-top: 20px;
+}

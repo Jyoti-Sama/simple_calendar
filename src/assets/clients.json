@@ -8,7 +8,7 @@
         "relation": "Clinician: User S"
     },
     {
-        "name": "Schedule Adam Cohen",
+        "name": "Adam Cohen",
         "client_id": "2",
         "email": "adam@gmail.com",
         "isAdult": true,
@@ -16,7 +16,7 @@
         "relation": "Clinician: User S"
     },
     {
-        "name": "Schedule Angela Simpson",
+        "name": "Angela Simpson",
         "client_id": "3",
         "email": "angela@gmail.com",
         "isAdult": true,

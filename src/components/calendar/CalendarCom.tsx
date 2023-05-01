@@ -21,11 +21,11 @@ import ShowEventModal from './ShowEventModal'
 
 const App: FC = () => {
     const [events, setEvents] = useState<Event[]>([
-        {
-            title: 'Learn cool stuff',
-            start,
-            end,
-        },
+        // {
+        //     title: 'Learn cool stuff',
+        //     start,
+        //     end,
+        // },
     ]);
 
 
@@ -133,6 +133,12 @@ const App: FC = () => {
         closeEventShowModal();
     }
 
+    function deleteEvent(eventID) {
+        const tempEvents = [...events];
+        const newEvents = tempEvents.filter(item => item.id != eventID);
+        setEvents(newEvents)
+    }
+
     // TODO
     const handleSelectEvent = (e: any) => {
         localStorage.setItem('temp-event', JSON.stringify(e.eventDetails));
@@ -201,8 +207,22 @@ const App: FC = () => {
 
 
     useEffect(() => {
-      localStorage.setItem('all-events', JSON.stringify(events));
-    }, [events])  
+        let temp = localStorage.getItem('all-events');
+        if (temp) {
+            temp = JSON.parse(temp);
+            for (let i = 0; i < temp.length; i++) {
+                temp[i].start = new Date(temp[i].start);
+                temp[i].end = new Date(temp[i].end);
+            }
+            setEvents(temp);
+        }
+    }, [])
+
+    useEffect(() => {
+        setTimeout(() => {
+            localStorage.setItem('all-events', JSON.stringify(events));
+        }, 1000);
+    }, [events])
 
     return (
         <div>
@@ -253,6 +273,7 @@ const App: FC = () => {
                 isOpen={eventShowModalIsOpen}
                 onClose={closeEventShowModal}
                 temEvent={tempEvent}
+                deleteEvent={deleteEvent}
             /> : null}
 
 

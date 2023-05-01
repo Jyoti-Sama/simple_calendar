@@ -7,7 +7,7 @@ import clientData from '../../assets/clients.json'
 
 Modal.setAppElement('#root'); // Set the app element to avoid accessibility issues
 
-const ShowEventModal = ({ isOpen, onClose, submitHandler, temEvent }) => {
+const ShowEventModal = ({ isOpen, onClose, submitHandler, temEvent, deleteEvent }) => {
     const [eventId, setEventId] = useState(0);
     const [selectedOption, setSelectedOption] = useState('client');
     const [clientName, setClientName] = useState(temEvent.client);
@@ -94,6 +94,11 @@ const ShowEventModal = ({ isOpen, onClose, submitHandler, temEvent }) => {
     const handleCancelClick = () => {
         onClose();
     };
+
+    const deleteHandler = () => {
+        deleteEvent(eventId)
+        onClose();
+    }
 
     // repeat logics
 
@@ -1124,38 +1129,57 @@ const ShowEventModal = ({ isOpen, onClose, submitHandler, temEvent }) => {
                             width: "100%",
                             display: "flex",
                             alignItems: "end",
-                            justifyContent: "end"
+                            justifyContent: "space-between"
                         }}
                     >
-                        <button
-                            onClick={handleCancelClick}
-                            style={{
-                                padding: "6px 12px",
-                                height: "31px",
-                                width: "65px",
-                                background: "#F2F2F2",
-                                border: "none",
-                                borderRadius: "4px",
-                                color: "#333",
-                                margin: "0 10px 0 0"
-                            }}
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            onClick={handleDoneClick}
-                            style={{
-                                padding: "6px 12px",
-                                height: "31px",
-                                width: "60px",
-                                background: "#1371C8",
-                                border: "none",
-                                borderRadius: "4px",
-                                color: "#fff"
-                            }}
-                        >
-                            Done
-                        </button>
+                        <div>
+                            <button
+                                onClick={deleteHandler}
+                                style={{
+                                    padding: "6px 12px",
+                                    height: "31px",
+                                    // width: "65px",
+                                    background: "#F2F2F2",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    color: "#333",
+                                    margin: "0 10px 0 0"
+                                }}
+                            >
+                                D
+                            </button>
+                        </div>
+                        <div>
+                            <button
+                                onClick={handleCancelClick}
+                                style={{
+                                    padding: "6px 12px",
+                                    height: "31px",
+                                    width: "65px",
+                                    background: "#F2F2F2",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    color: "#333",
+                                    margin: "0 10px 0 0"
+                                }}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleDoneClick}
+                                style={{
+                                    padding: "6px 12px",
+                                    height: "31px",
+                                    width: "60px",
+                                    background: "#1371C8",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    color: "#fff"
+                                }}
+                            >
+                                Done
+                            </button>
+                        </div>
                     </div>
 
                 </div>

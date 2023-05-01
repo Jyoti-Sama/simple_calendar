@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
 import styles from './style.module.css'
 
-// import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { useState } from 'react';
 
 // <NavLink
 //   to="/messages"
@@ -14,30 +15,52 @@ import styles from './style.module.css'
 
 
 function LeftBar() {
+    const [isLinkActivecal, setisLinkActivecal] = useState(false)
+    const [isLinkActivecli, setisLinkActivecli] = useState(false)
     return (
         <div className={styles['container']}>
             <div className={styles['menu']}>
-                <Link to="/">
+                <NavLink
+                    to="/"
+                    style={({ isActive, isPending }) => {
+                        isPending ? setisLinkActivecal(false) : isActive ? setisLinkActivecal(true) : setisLinkActivecal(false)
+                        return { color: "#333" }
+                    }
+                    }
+                >
                     <a>
                         <div className={styles['menu-items']}>
                             <div className={styles['m-icon']}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 12 12"><path fill="#707070" fill-rule="evenodd" d="M9.75 0h.75c.825 0 1.5.675 1.5 1.5v9c0 .825-.675 1.5-1.5 1.5h-9A1.5 1.5 0 010 10.5v-9A1.5 1.5 0 011.5 0h8.25zM1.5 10.5h9V3.75h-9v6.75zm2.25-3a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" clip-rule="evenodd"></path></svg>
                             </div>
-                            <div className={styles['txt']}>Calendar</div>
+                            <div
+                                className={styles['txt']}
+                                style={{
+                                    color: isLinkActivecal ? "#1371c8" : "#333",
+                                    fontWeight: isLinkActivecal ? "600" : "400",
+                                }}>
+                                Calendar</div>
                         </div>
                     </a>
-                </Link>
+                </NavLink>
 
-                <Link to="/clients">
+                <NavLink
+                    to="/clients"
+                    style={({ isActive, isPending }) => {
+                        isPending ? setisLinkActivecli(false) : isActive ? setisLinkActivecli(true) : setisLinkActivecli(false)
+                        return { color: "#333" }
+                    }
+                    }
+                >
                     <a>
                         <div className={styles['menu-items']}>
                             <div className={styles['m-icon']}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="12" fill="none" viewBox="0 0 18 12"><path fill="#707070" d="M6 7.5c-2.006 0-6 1.071-6 4.5h12c0-3.429-3.994-4.5-6-4.5zM6 6c1.654 0 3-1.346 3-3S7.654 0 6 0 3 1.346 3 3s1.346 3 3 3zm5.143 1.551c.994.72 2.571 1.663 2.571 4.449h3.429c0-3-3.892-4.217-6-4.449zm0-1.551c1.654 0 3-1.346 3-3s-1.346-3-3-3c-.463 0-.892.111-1.286.3.54.763.857 1.697.857 2.7a4.664 4.664 0 01-.857 2.7c.394.189.823.3 1.286.3z"></path></svg>
                             </div>
-                            <div className={styles['txt']}>Clients</div>
+                            <div className={styles['txt']} style={{ color: isLinkActivecli ? "#1371c8" : "#333", fontWeight: isLinkActivecli ? "600" : "400", }}>Clients</div>
                         </div>
                     </a>
-                </Link>
+                </NavLink>
 
                 <a href="http://">
                     <div className={styles['menu-items']}>

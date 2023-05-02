@@ -87,7 +87,7 @@ const CreateEventModal = ({ isOpen, onClose, submitHandler, temEvent }) => {
 
     const [repeatEvery, setRepeatEvery] = useState(1);
     const [repeatFrequency, setRepeatFrequency] = useState("week");
-    const [repeatFrequencyCount, setRepeatFrequencyCount] = useState(1);
+    const [repeatFrequencyCount, setRepeatFrequencyCount] = useState("1");
     const [repeatDays, setRepeatDays] = useState([
         false, // Sunday
         false, // Monday
@@ -227,7 +227,7 @@ const CreateEventModal = ({ isOpen, onClose, submitHandler, temEvent }) => {
 
 
     useEffect(() => {
-        let temp = localStorage.getItem("set-event");
+        let temp: any = localStorage.getItem("set-event");
         if (temp) {
             temp = JSON.parse(temp);
             setEventDate(temp.date);
@@ -292,7 +292,7 @@ const CreateEventModal = ({ isOpen, onClose, submitHandler, temEvent }) => {
                                 <select
                                     value={clientName}
                                     onChange={(e) => {
-                                        let s = e.target.value;
+                                        let s: any = e.target.value;
                                         s = s.split(":");
                                         handleClientNameChange(s[0]);
                                         setclientID(s[1]);
@@ -997,7 +997,7 @@ const CreateEventModal = ({ isOpen, onClose, submitHandler, temEvent }) => {
                                                             padding: "0 5px 0 15px"
                                                         }}
                                                         value={serviceFee}
-                                                        onChange={e => setServiceFee(e.target.value)}
+                                                        onChange={e => setServiceFee(parseInt(e.target.value))}
                                                     />
                                                     <span style={{
                                                         position: "absolute",

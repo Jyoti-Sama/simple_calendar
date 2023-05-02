@@ -19,6 +19,11 @@ import CreateEventModal from './CreateEventModal'
 import './custom.cal.css'
 import ShowEventModal from './ShowEventModal'
 
+type CustomTemp = {
+    start: string,
+    end: string
+}
+
 const App: FC = () => {
     const [events, setEvents] = useState<Event[]>([
         // {
@@ -207,7 +212,7 @@ const App: FC = () => {
 
 
     useEffect(() => {
-        let temp = localStorage.getItem('all-events');
+        let temp: any = localStorage.getItem('all-events');
         if (temp) {
             temp = JSON.parse(temp);
             for (let i = 0; i < temp.length; i++) {
